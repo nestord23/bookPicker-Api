@@ -1,0 +1,89 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String?
+  email     String     @unique
+  password  String
+  role      String     @default("user")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  books     UserBook[]
+
+  @@map("users")
+}
+
+model Author {
+  id          Int       @id @default(autoincrement())
+  name        String
+  biography   String?
+  birthDate   DateTime?
+  nationality String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  books       Book[]
+
+  @@map("authors")
+}
+
+model Book {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String?
+  publishYear Int?
+  genre       String?
+  coverImage  String?
+  authorId    Int?
+  author      Author?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  owners      UserBook[]
+  tags        BookTag[]
+
+  @@map("books")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  books     BookTag[]
+
+  @@map("tags")
+}
+
+model BookTag {
+  id        Int      @id @default(autoincrement())
+  bookId    Int
+  tagId     Int
+  createdAt DateTime @default(now())
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([bookId, tagId])
+  @@map("book_tags")
+}
+
+model UserBook {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  bookId    Int
+  status    String   @default("to_read")
+  rating    Int?
+  review    String?
+  addedAt   DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bookId])
+  @@map("user_books")
+}
