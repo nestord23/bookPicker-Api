@@ -6,20 +6,7 @@ import {
   listBooks,
   updateBook,
 } from "../services/book.service.js";
-
-/** Saca el id numérico del parámetro de ruta o responde 400. */
-function parseId(
-  id: string | string[] | undefined,
-  res: Response,
-): number | null {
-  const raw = Array.isArray(id) ? id[0] : id;
-  const parsed = Number.parseInt(raw ?? "", 10);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    res.status(400).json({ success: false, message: "Id invalido" });
-    return null;
-  }
-  return parsed;
-}
+import { parseId } from "../utils/route.js";
 
 export async function list(req: Request, res: Response, next: NextFunction) {
   try {
