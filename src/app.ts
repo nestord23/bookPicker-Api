@@ -7,6 +7,8 @@ import {
   notFoundHandler,
 } from "./middlewares/error.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
+import authorRoutes from "./routes/author.routes.js";
+import bookRoutes from "./routes/book.routes.js";
 
 const BODY_LIMIT = "10mb";
 
@@ -44,6 +46,8 @@ export function createApp(): Express {
 
   // Rutas de la API (se agregan por fase):
   app.use("/api/auth", authRoutes);
+  app.use("/api/authors", authorRoutes);
+  app.use("/api/books", bookRoutes);
 
   // Handlers finales — el orden es obligatorio:
   // errores de parsing → 404 → error global
