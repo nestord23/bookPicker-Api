@@ -5,18 +5,22 @@
 
 /** roles validos para la aplicacion (coincide con el campo  User.role) */
 export type UserRole = "user" | "admin";
-/** contenido firmado dentro de cada token  jwt
- * Debe de mantenerse minimo viaja en cada request del cliente
- */
 
+/** Contenido firmado dentro de cada token JWT.
+ * Debe mantenerse minimo: viaja en cada request del cliente. */
 export interface JwtPayload {
   userId: number;
-  emai: string;
+  email: string;
   role: UserRole;
 }
 
 /**
  * Usuario autenticado adjuntado al Request por auth.middleware.
- * Alias semántico para no acoplar las capas al detalle del token.
+ *
+ * Desacoplado de JwtPayload a proposito (DIP): la logica de negocio
+ * depende solo de los campos que realmente usa, no del detalle del token.
  */
-export type AuthUser = JwtPayload;
+export interface AuthUser {
+  userId: number;
+  role: UserRole;
+}

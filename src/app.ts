@@ -6,6 +6,7 @@ import {
   jsonParseErrorHandler,
   notFoundHandler,
 } from "./middlewares/error.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const BODY_LIMIT = "10mb";
 
@@ -42,7 +43,7 @@ export function createApp(): Express {
   });
 
   // Rutas de la API (se agregan por fase):
-  // app.use("/api/users", userRoutes);
+  app.use("/api/auth", authRoutes);
 
   // Handlers finales — el orden es obligatorio:
   // errores de parsing → 404 → error global

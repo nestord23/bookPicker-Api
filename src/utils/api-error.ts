@@ -25,6 +25,10 @@ export class ApiError extends Error {
     return new ApiError(401, message);
   }
 
+  static forbidden(message = "Prohibido"): ApiError {
+    return new ApiError(403, message);
+  }
+
   static notFound(message = "Recurso no encontrado"): ApiError {
     return new ApiError(404, message);
   }

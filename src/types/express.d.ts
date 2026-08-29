@@ -4,7 +4,7 @@
  *  middleware o controller sin casts ni `any`.
  */
 
-import type { AuthUser } from "./jwt.types.ts";
+import type { AuthUser } from "./jwt.types.js";
 
 declare global {
   namespace Express {
