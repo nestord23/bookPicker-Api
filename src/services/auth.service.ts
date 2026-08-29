@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../config/prisma.js";
 import { ApiError } from "../utils/api-error.js";
 import { signToken } from "../utils/jwt.js";
+import { normalizeEmail } from "../utils/email.js";
 import type { UserRole } from "../types/jwt.types.js";
 
 const PASSWORD_SALT_ROUNDS = 10;
@@ -25,11 +26,6 @@ interface AuthSession {
     email: string;
     role: UserRole;
   };
-}
-
-/** Normaliza el email a minusculas para evitar duplicados por caso. */
-function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase();
 }
 
 /**

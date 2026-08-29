@@ -9,6 +9,8 @@ import {
 import authRoutes from "./routes/auth.routes.js";
 import authorRoutes from "./routes/author.routes.js";
 import bookRoutes from "./routes/book.routes.js";
+import tagRoutes from "./routes/tag.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import userBookRoutes from "./routes/userBook.routes.js";
 
 const BODY_LIMIT = "10mb";
@@ -47,8 +49,10 @@ export function createApp(): Express {
 
   // Rutas de la API (se agregan por fase):
   app.use("/api/auth", authRoutes);
+  app.use("/api/users", userRoutes);
   app.use("/api/authors", authorRoutes);
   app.use("/api/books", bookRoutes);
+  app.use("/api/tags", tagRoutes);
   app.use("/api/me/books", userBookRoutes);
 
   // Handlers finales — el orden es obligatorio:
