@@ -1,5 +1,6 @@
 import { prisma } from "../config/prisma.js";
 import { ApiError } from "../utils/api-error.js";
+import { publishAuthor } from "../ws/index.js";
 import type {
   AuthorResponse,
   CreateAuthorInput,
@@ -50,7 +51,9 @@ export async function createAuthor(
       nationality: input.nationality,
     },
   });
-  return toAuthorResponse(author);
+  const response = toAuthorResponse(author);
+  publishAuthor("AUTHOR_CREATED", response);
+  return response;
 }
 
 /** Actualiza un autor existente o lanza 404. */
@@ -69,13 +72,16 @@ export async function updateAuthor(
       nationality: input.nationality,
     },
   });
-  return toAuthorResponse(author);
+  const response = toAuthorResponse(author);
+  publishAuthor("AUTHOR_UPDATED", response);
+  return response;
 }
 
 /** Elimina un autor o lanza 404. */
 export async function deleteAuthor(id: number): Promise<void> {
   await authorExistsOrThrow(id);
   await prisma.author.delete({ where: { id } });
+  publishAuthor("AUTHOR_DELETED", { id });
 }
 
 /** Lanza 404 si el autor no existe. */

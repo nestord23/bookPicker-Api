@@ -1,5 +1,6 @@
 import { prisma } from "../config/prisma.js";
 import { ApiError } from "../utils/api-error.js";
+import { publishBook } from "../ws/index.js";
 import type {
   BookResponse,
   CreateBookInput,
@@ -80,7 +81,9 @@ export async function createBook(input: CreateBookInput): Promise<BookResponse> 
     },
     select: BOOK_SELECT,
   });
-  return toBookResponse(book);
+  const response = toBookResponse(book);
+  publishBook("BOOK_CREATED", response);
+  return response;
 }
 
 /** Actualiza un libro existente o lanza 404.
@@ -108,13 +111,16 @@ export async function updateBook(
     },
     select: BOOK_SELECT,
   });
-  return toBookResponse(book);
+  const response = toBookResponse(book);
+  publishBook("BOOK_UPDATED", response);
+  return response;
 }
 
 /** Elimina un libro o lanza 404. */
 export async function deleteBook(id: number): Promise<void> {
   await bookExistsOrThrow(id);
   await prisma.book.delete({ where: { id } });
+  publishBook("BOOK_DELETED", { id });
 }
 
 /** Lanza 404 si el libro no existe. */
