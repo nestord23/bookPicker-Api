@@ -7,7 +7,7 @@ const router = Router();
 
 router.get("/", requireAuth, tagController.list);
 router.get("/:id", requireAuth, tagController.getOne);
-router.post("/", requireAuth, requireRole("admin"), validateTag, tagController.create);
+router.post("/", requireAuth, validateTag, tagController.create);
 router.put(
   "/:id",
   requireAuth,

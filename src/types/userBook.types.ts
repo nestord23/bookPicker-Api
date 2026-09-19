@@ -8,12 +8,14 @@ export interface AddBookInput {
   status?: ReadingStatus;
   rating?: number;
   review?: string;
+  color?: string;
 }
 
 export interface UpdateUserBookInput {
   status?: ReadingStatus;
   rating?: number;
   review?: string;
+  color?: string;
 }
 
 export interface UserBookResponse {
@@ -21,6 +23,7 @@ export interface UserBookResponse {
   status: ReadingStatus;
   rating: number | null;
   review: string | null;
+  color: string | null;
   addedAt: Date;
   updatedAt: Date;
   book: {

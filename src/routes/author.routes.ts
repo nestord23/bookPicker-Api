@@ -10,7 +10,6 @@ router.get("/:id", requireAuth, authorController.getOne);
 router.post(
   "/",
   requireAuth,
-  requireRole("admin"),
   validateAuthor,
   authorController.create,
 );

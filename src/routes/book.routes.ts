@@ -10,7 +10,6 @@ router.get("/:id", requireAuth, bookController.getOne);
 router.post(
   "/",
   requireAuth,
-  requireRole("admin"),
   validateBook,
   bookController.create,
 );

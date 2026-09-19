@@ -12,6 +12,7 @@ const USER_BOOK_SELECT = {
   status: true,
   rating: true,
   review: true,
+  color: true,
   addedAt: true,
   updatedAt: true,
   book: {
@@ -30,6 +31,7 @@ function toUserBookResponse(entry: {
   status: string;
   rating: number | null;
   review: string | null;
+  color: string | null;
   addedAt: Date;
   updatedAt: Date;
   book: {
@@ -45,6 +47,7 @@ function toUserBookResponse(entry: {
     status: entry.status as ReadingStatus,
     rating: entry.rating,
     review: entry.review,
+    color: entry.color,
     addedAt: entry.addedAt,
     updatedAt: entry.updatedAt,
     book: entry.book,
@@ -100,6 +103,7 @@ export async function addBookToLibrary(
       status: input.status ?? "to_read",
       rating: input.rating,
       review: input.review,
+      color: input.color,
     },
     select: USER_BOOK_SELECT,
   });
@@ -120,6 +124,7 @@ export async function updateUserBook(
       status: input.status,
       rating: input.rating ?? null,
       review: input.review,
+      color: input.color,
     },
     select: USER_BOOK_SELECT,
   });

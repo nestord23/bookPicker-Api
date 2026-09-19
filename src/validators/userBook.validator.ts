@@ -5,6 +5,7 @@ import type { ReadingStatus } from "../types/userBook.types.js";
 const VALID_STATUS: ReadingStatus[] = ["to_read", "reading", "read"];
 const MIN_RATING = 1;
 const MAX_RATING = 5;
+const COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
 function isReadingStatus(value: unknown): value is ReadingStatus {
   return (
@@ -19,6 +20,14 @@ function isRating(value: unknown): value is number {
     value >= MIN_RATING &&
     value <= MAX_RATING
   );
+}
+
+function isColor(value: unknown): value is string {
+  return typeof value === "string" && COLOR_PATTERN.test(value);
+}
+
+function colorOrUndefined(value: unknown): string | undefined {
+  return isColor(value) ? value : undefined;
 }
 
 /** Valida el cuerpo para agregar un libro a la biblioteca. `bookId` es obligatorio. */
@@ -44,12 +53,17 @@ export function validateAddBook(
     );
     return;
   }
+  if (body.color !== undefined && !isColor(body.color)) {
+    next(ApiError.badRequest("color debe ser un hex valido (ej: #FFD500)"));
+    return;
+  }
 
   req.body = {
     bookId,
     status: body.status,
     rating: body.rating,
     review: typeof body.review === "string" ? body.review : undefined,
+    color: colorOrUndefined(body.color),
   };
   next();
 }
@@ -72,11 +86,16 @@ export function validateUpdateUserBook(
     );
     return;
   }
+  if (body.color !== undefined && !isColor(body.color)) {
+    next(ApiError.badRequest("color debe ser un hex valido (ej: #FFD500)"));
+    return;
+  }
 
   req.body = {
     status: body.status,
     rating: body.rating,
     review: typeof body.review === "string" ? body.review : undefined,
+    color: colorOrUndefined(body.color),
   };
   next();
 }
