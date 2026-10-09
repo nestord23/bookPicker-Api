@@ -34,6 +34,20 @@ export async function list(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function nextReading(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const userId = requireUserId(req);
+  try {
+    const data = await userBookService.pickNextReading(userId);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function add(req: Request, res: Response, next: NextFunction) {
   const userId = requireUserId(req);
   try {

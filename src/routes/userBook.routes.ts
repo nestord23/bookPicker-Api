@@ -12,6 +12,8 @@ router.use(requireAuth);
 
 router.get("/", userBookController.list);
 router.post("/", validateAddBook, userBookController.add);
+// Debe ir antes de "/:bookId" para que "next" no se interprete como un id.
+router.get("/next", userBookController.nextReading);
 router.get("/:bookId", userBookController.getOne);
 router.patch("/:bookId", validateUpdateUserBook, userBookController.update);
 router.delete("/:bookId", userBookController.remove);
